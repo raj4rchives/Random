@@ -133,7 +133,7 @@ body {
     padding: 20px;
     margin-bottom: 40px;
     page-break-before: always;
-    page-break-inside: avoid; /* Prevents splitting page inside */
+    page-break-inside: avoid;
     background: white;
 }
 .subject-page:first-child {
@@ -181,7 +181,7 @@ table.tracker-table {
 }
 
 table.tracker-table tr {
-    page-break-inside: avoid; /* Prevents any single table row from splitting across pages */
+    page-break-inside: avoid;
     page-break-after: auto;
 }
 
@@ -229,4 +229,4 @@ td.chap-cell {
 
 @media print {
     .btn-delete-row { display: none; }
-}
+                  }
