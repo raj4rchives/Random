@@ -3,346 +3,466 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JEE Physics Master Syllabus Tracker</title>
+    <title>Syllabus Tracker - 370R</title>
+    <!-- html2pdf.js for clean PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        :root {
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --border-color: #cbd5e1;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --accent-blue: #0284c7;
-            --accent-green: #16a34a;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1450px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 12px;
-            position: relative;
-        }
-
-        header h1 {
-            font-size: 1.6rem;
-            color: var(--accent-blue);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .top-controls {
+            background-color: #f1f5f9;
+            color: #1e293b;
+            padding: 15px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
+            justify-content: center;
         }
 
-        .candidate-box {
+        .app-card {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid #cbd5e1;
+        }
+
+        /* Top Bar & Actions */
+        .top-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .header-title {
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .header-title h1 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 16px;
+            border-radius: 10px;
             font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .candidate-box input {
-            padding: 6px 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 0.9rem;
-            width: 220px;
-        }
-
-        .btn-download {
-            background-color: var(--accent-blue);
-            color: white;
+            font-size: 14px;
             border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-download:hover {
-            background-color: #0369a1;
-        }
-
-        .table-container {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-            font-size: 0.8rem;
-        }
-
-        th, td {
-            border: 1px solid var(--border-color);
-            padding: 6px 4px;
-            vertical-align: middle;
-        }
-
-        th {
-            background-color: #f1f5f9;
-            color: var(--text-main);
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.7rem;
-        }
-
-        tr:nth-child(even) {
-            background-color: #fcfcfc;
-        }
-
-        .chapter-col {
-            text-align: left;
-            font-weight: 500;
-            padding-left: 8px;
-            min-width: 180px;
-        }
-
-        .num-col {
-            font-weight: bold;
-            color: var(--text-muted);
-            width: 35px;
-        }
-
-        .lec-input {
-            width: 45px;
-            text-align: center;
-            padding: 4px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-
-        /* Custom Checkbox */
-        .track-box {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--border-color);
-            border-radius: 4px;
-            margin: 0 auto;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: white;
-            transition: all 0.1s;
+            gap: 6px;
+            transition: all 0.2s;
         }
 
-        .track-box.checked {
-            background-color: var(--accent-green);
-            border-color: var(--accent-green);
+        .btn-clear {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .btn-clear:hover {
+            background-color: #bfdbfe;
+        }
+
+        .btn-download {
+            background-color: #2563eb;
             color: white;
-            font-weight: bold;
-            font-size: 12px;
         }
 
-        .track-box.checked::after {
-            content: '✓';
+        .btn-download:hover {
+            background-color: #1d4ed8;
+        }
+
+        /* Input Form Container */
+        .form-card {
+            border: 1.5px solid #94a3b8;
+            border-radius: 14px;
+            padding: 18px;
+            background-color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1.5px solid #cbd5e1;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: #2563eb;
+        }
+
+        .btn-add {
+            width: 100%;
+            background-color: #2563eb;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .btn-add:hover {
+            background-color: #1d4ed8;
+        }
+
+        .info-text {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* --- PDF PRINT TEMPLATE (Exact Image 1 Style) --- */
+        #pdf-render-area {
+            background: white;
+            padding: 15px;
+            color: #000;
+            overflow-x: auto;
+        }
+
+        .pdf-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 2px solid #000;
+            padding-bottom: 4px;
+            margin-bottom: 10px;
+        }
+
+        .pdf-title-main {
+            font-size: 18px;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #000;
+            letter-spacing: 0.5px;
+        }
+
+        .pdf-subtitle {
+            font-size: 11px;
+            font-weight: 700;
+            color: #2563eb;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .pdf-meta {
+            font-size: 11px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        /* Exact Black Borders & Layout */
+        table.tracker-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        table.tracker-table th, 
+        table.tracker-table td {
+            border: 1px solid #000000 !important; /* Strict Black Borders */
+            padding: 5px 3px;
+            text-align: center;
+            vertical-align: middle;
+            color: #000;
+        }
+
+        /* Colored Section Headers */
+        th.head-main {
+            background-color: #f1f5f9;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        th.head-concept {
+            background-color: #dbeafe;
+            color: #1e40af;
+            font-weight: 800;
+            font-size: 10px;
+        }
+
+        th.head-practice {
+            background-color: #fef9c3;
+            color: #854d0e;
+            font-weight: 800;
+            font-size: 10px;
+        }
+
+        th.head-revision {
+            background-color: #dcfce7;
+            color: #166534;
+            font-weight: 800;
+            font-size: 10px;
+        }
+
+        td.chap-cell {
+            text-align: left;
+            padding-left: 8px;
+            font-weight: 700;
+            font-size: 11px;
+        }
+
+        .box-tick {
+            display: inline-block;
+            width: 13px;
+            height: 13px;
+            border: 1px solid #000;
+            border-radius: 2px;
+            background: #fff;
+        }
+
+        .btn-delete-row {
+            background: none;
+            border: none;
+            color: #ef4444;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
         }
 
         @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-            .container {
-                border: none;
-                box-shadow: none;
-                padding: 0;
-            }
-            .btn-download {
-                display: none;
-            }
-            .candidate-box input {
-                border: none;
-                border-bottom: 1px solid #000;
-                border-radius: 0;
-            }
-            th {
-                background-color: #eee !important;
-                -webkit-print-color-adjust: exact;
-            }
+            .btn-delete-row { display: none; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>JEE Physics Master Syllabus Tracker</h1>
-        <p style="font-size: 0.85rem; color: #64748b; margin-top: 4px;">Class 11 & 12 Offline Printable & Interactive Ledger</p>
-    </header>
-
-    <div class="top-controls">
-        <div class="candidate-box">
-            <label for="candidateName">Candidate Name:</label>
-            <input type="text" id="candidateName" placeholder="Apna naam yahan likhein..." oninput="saveData()">
+<div class="app-card">
+    <!-- Header -->
+    <div class="top-header">
+        <div class="header-title">
+            <span style="font-size: 24px;">📚</span>
+            <h1>Syllabus Tracker</h1>
         </div>
-        <button class="btn-download" onclick="window.print()">📥 Download / Print PDF</button>
     </div>
 
-    <div class="table-container">
-        <table id="trackerTable">
+    <!-- Action Buttons -->
+    <div class="action-grid">
+        <button class="btn btn-clear" onclick="clearSyllabus()">Clear Syllabus</button>
+        <button class="btn btn-download" onclick="downloadPDF()">📄 Download A4 PDF</button>
+    </div>
+
+    <!-- Input Form -->
+    <div class="form-card">
+        <div class="form-group">
+            <label>Subject</label>
+            <select id="subjectSelect" class="form-control">
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Mathematics">Mathematics</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Chapter Name</label>
+            <input type="text" id="chapNameInput" class="form-control" placeholder="e.g. Laws of Motion">
+        </div>
+
+        <div class="form-group">
+            <label>Total Lectures</label>
+            <input type="number" id="totLecInput" class="form-control" placeholder="e.g. 13">
+        </div>
+
+        <button class="btn-add" onclick="addChapter()">+ Add Chapter</button>
+    </div>
+
+    <p class="info-text">
+        Bas Subject, Chapter Name aur Total Lectures dalo. PDF me A4 Landscape print karke offline tick kar sakte ho.
+    </p>
+
+    <!-- PDF Printable Container (Image 1 Format) -->
+    <div id="pdf-render-area">
+        <div class="pdf-header-row">
+            <div>
+                <div class="pdf-title-main" id="displaySubjectTitle">JEE PHYSICS TRACKER</div>
+                <div class="pdf-subtitle">CLASS 11 & 12 MASTER PROGRESS LEDGER</div>
+            </div>
+            <div class="pdf-meta">
+                Candidate Name: _____________________
+            </div>
+        </div>
+
+        <table class="tracker-table">
             <thead>
                 <tr>
-                    <th rowspan="2">#</th>
-                    <th rowspan="2">Chapter Name</th>
-                    <th rowspan="2">Total Lec</th>
-                    <th rowspan="2">Lec Comp</th>
-                    <th rowspan="2">Revision Rounds</th>
-                    <th rowspan="2">Mains Level</th>
-                    <th rowspan="2">Adv Level</th>
-                    <th rowspan="2">Short Notes</th>
-                    <th colspan="5">Practice & Testing</th>
-                    <th colspan="3">Revisions</th>
+                    <th rowspan="2" class="head-main" style="width: 25px;">#</th>
+                    <th rowspan="2" class="head-main" style="width: 180px;">CHAPTER NAME</th>
+                    <th rowspan="2" class="head-main" style="width: 45px;">TOTAL LEC</th>
+                    <th rowspan="2" class="head-main" style="width: 45px;">LEC COMP</th>
+                    <th colspan="3" class="head-concept">CONCEPT MASTERY</th>
+                    <th colspan="5" class="head-practice">PRACTICE & TESTING</th>
+                    <th colspan="3" class="head-revision">REVISION ROUNDS</th>
+                    <th rowspan="2" class="head-main btn-delete-row"></th>
                 </tr>
                 <tr>
-                    <th>DPP</th>
-                    <th>HW</th>
-                    <th>Module</th>
-                    <th>PYQ</th>
-                    <th>Test</th>
-                    <th>R1</th>
-                    <th>R2</th>
-                    <th>R3</th>
+                    <th class="head-main" style="width: 32px;">MAINS</th>
+                    <th class="head-main" style="width: 32px;">ADV</th>
+                    <th class="head-main" style="width: 38px;">NOTES</th>
+                    <th class="head-main" style="width: 32px;">DPP</th>
+                    <th class="head-main" style="width: 32px;">HW</th>
+                    <th class="head-main" style="width: 42px;">MODULE</th>
+                    <th class="head-main" style="width: 32px;">PYQ</th>
+                    <th class="head-main" style="width: 32px;">TEST</th>
+                    <th class="head-main" style="width: 28px;">R1</th>
+                    <th class="head-main" style="width: 28px;">R2</th>
+                    <th class="head-main" style="width: 28px;">R3</th>
                 </tr>
             </thead>
-            <tbody id="tableBody">
-                <!-- Javascript will generate rows here -->
+            <tbody id="chapterTableBody">
+                <!-- Chapters will be rendered here dynamically -->
             </tbody>
         </table>
     </div>
 </div>
 
 <script>
-    const chapters = [
-        "Basic Maths", "Motion in Straight Line", "Motion in Plane", 
-        "Newton's Laws of Motion", "Circular Motion", "Work, Energy & Power", 
-        "Centre of Mass", "Rotational Motion", "Mechanical Properties of Solids", 
-        "Mechanical Properties of Fluids", "Thermal Properties of Matter", 
-        "KTG & Thermodynamics", "Simple Harmonic Motion", "Waves", 
-        "Electric Charges & Field", "Electrostatic Potential & Capacitance", 
-        "Current Electricity", "Moving Charges & Magnetism", "Electromagnetic Induction", 
-        "Gravitation", "Alternating Current", "Ray Optics", "Electromagnetic Waves", 
-        "Wave Optics", "Modern Physics", "Units & Measurements", "Semiconductors"
+    // Default Initial Chapters Data
+    const defaultData = [
+        { name: "Basic Maths", total: 7 },
+        { name: "Motion in Straight Line", total: 8 },
+        { name: "Motion in Plane", total: 7 },
+        { name: "Newton's Laws of Motion", total: 11 },
+        { name: "Circular Motion", total: 5 },
+        { name: "Work, Energy & Power", total: 6 },
+        { name: "Centre of Mass", total: 11 },
+        { name: "Rotational Motion", total: 15 },
+        { name: "Mechanical Properties of Solids", total: 1 },
+        { name: "Mechanical Properties of Fluids", total: 7 },
+        { name: "Thermal Properties of Matter", total: 5 },
+        { name: "KTG & Thermodynamics", total: 6 },
+        { name: "Simple Harmonic Motion", total: 5 }
     ];
 
-    const defaultLectures = [7, 8, 7, 11, 5, 6, 11, 15, 1, 7, 5, 6, 5, 8, 9, 8, 7, 7, 6, 5, 4, 10, 2, 5, 10, 2, 5];
+    let currentSyllabus = [];
 
-    function buildTable() {
-        const tbody = document.getElementById('tableBody');
+    function init() {
+        const saved = localStorage.getItem('custom_jee_syllabus_tracker');
+        if (saved) {
+            currentSyllabus = JSON.parse(saved);
+        } else {
+            currentSyllabus = [...defaultData];
+        }
+        renderTable();
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('chapterTableBody');
+        const subject = document.getElementById('subjectSelect').value;
+        document.getElementById('displaySubjectTitle').innerText = `JEE ${subject.toUpperCase()} TRACKER`;
+
         let html = '';
-        chapters.forEach((chap, index) => {
+        currentSyllabus.forEach((item, index) => {
             html += `
                 <tr>
-                    <td class="num-col">${index + 1}</td>
-                    <td class="chapter-col">${chap}</td>
-                    <td><input type="number" class="lec-input" id="total_${index}" value="${defaultLectures[index]}" oninput="saveData()"></td>
-                    <td><input type="number" class="lec-input" id="comp_${index}" value="0" oninput="saveData()"></td>
-                    <td><input type="text" class="lec-input" style="width:55px;" id="rev_${index}" value="" oninput="saveData()"></td>
-                    <td><div class="track-box" id="mains_${index}" onclick="toggleBox(this)"></div></td>
-                    <td><div class="track-box" id="adv_${index}" onclick="toggleBox(this)"></div></td>
-                    <td><div class="track-box" id="notes_${index}" onclick="toggleBox(this)"></div></td>
-                    <td><div class="track-box" id="dpp_${index}" onclick="toggleBox(this)"></div></td>
-                    <td><div class="track-box" id="hw_${index}" onclick="toggleBox(this)"></div></td>
-                    <td><div class="track-box" id="mod_${index}" onclick="toggleBox(this)"></div></td>
-                    <td><div class="track-box" id="pyq_${index}" onclick="toggleBox(this)"></div></td>
-                    <td><div class="track-box" id="test_${index}" onclick="toggleBox(this)"></div></td>
-                    <td><div class="track-box" id="r1_${index}" onclick="toggleBox(this)"></div></td>
-                    <td><div class="track-box" id="r2_${index}" onclick="toggleBox(this)"></div></td>
-                    <td><div class="track-box" id="r3_${index}" onclick="toggleBox(this)"></div></td>
+                    <td><strong>${index + 1}</strong></td>
+                    <td class="chap-cell">${item.name}</td>
+                    <td><strong>${item.total}</strong></td>
+                    <td><span class="box-tick"></span></td>
+                    <td><span class="box-tick"></span></td>
+                    <td><span class="box-tick"></span></td>
+                    <td><span class="box-tick"></span></td>
+                    <td><span class="box-tick"></span></td>
+                    <td><span class="box-tick"></span></td>
+                    <td><span class="box-tick"></span></td>
+                    <td><span class="box-tick"></span></td>
+                    <td><span class="box-tick"></span></td>
+                    <td><span class="box-tick"></span></td>
+                    <td><span class="box-tick"></span></td>
+                    <td><span class="box-tick"></span></td>
+                    <td class="btn-delete-row"><button class="btn-delete-row" onclick="deleteChapter(${index})">✕</button></td>
                 </tr>
             `;
         });
         tbody.innerHTML = html;
-        loadData();
+        localStorage.setItem('custom_jee_syllabus_tracker', JSON.stringify(currentSyllabus));
     }
 
-    function toggleBox(el) {
-        el.classList.toggle('checked');
-        saveData();
-    }
+    function addChapter() {
+        const name = document.getElementById('chapNameInput').value.trim();
+        const total = document.getElementById('totLecInput').value.trim();
 
-    function saveData() {
-        const data = {
-            candidateName: document.getElementById('candidateName').value,
-            fields: {}
-        };
-
-        chapters.forEach((_, index) => {
-            data.fields[`total_${index}`] = document.getElementById(`total_${index}`).value;
-            data.fields[`comp_${index}`] = document.getElementById(`comp_${index}`).value;
-            data.fields[`rev_${index}`] = document.getElementById(`rev_${index}`).value;
-
-            ['mains', 'adv', 'notes', 'dpp', 'hw', 'mod', 'pyq', 'test', 'r1', 'r2', 'r3'].forEach(type => {
-                const box = document.getElementById(`${type}_${index}`);
-                data.fields[`${type}_${index}`] = box.classList.contains('checked');
-            });
-        });
-
-        localStorage.setItem('jee_physics_tracker_data', JSON.stringify(data));
-    }
-
-    function loadData() {
-        const saved = localStorage.getItem('jee_physics_tracker_data');
-        if (!saved) return;
-        const data = JSON.parse(saved);
-
-        if (data.candidateName) {
-            document.getElementById('candidateName').value = data.candidateName;
+        if (!name || !total) {
+            alert('Kripya Chapter Name aur Total Lectures dono fill karein!');
+            return;
         }
 
-        chapters.forEach((_, index) => {
-            if (data.fields[`total_${index}`] !== undefined) {
-                document.getElementById(`total_${index}`).value = data.fields[`total_${index}`];
-            }
-            if (data.fields[`comp_${index}`] !== undefined) {
-                document.getElementById(`comp_${index}`).value = data.fields[`comp_${index}`];
-            }
-            if (data.fields[`rev_${index}`] !== undefined) {
-                document.getElementById(`rev_${index}`).value = data.fields[`rev_${index}`];
-            }
+        currentSyllabus.push({ name: name, total: total });
+        document.getElementById('chapNameInput').value = '';
+        document.getElementById('totLecInput').value = '';
+        renderTable();
+    }
 
-            ['mains', 'adv', 'notes', 'dpp', 'hw', 'mod', 'pyq', 'test', 'r1', 'r2', 'r3'].forEach(type => {
-                if (data.fields[`${type}_${index}`]) {
-                    document.getElementById(`${type}_${index}`).classList.add('checked');
-                }
-            });
+    function deleteChapter(index) {
+        currentSyllabus.splice(index, 1);
+        renderTable();
+    }
+
+    function clearSyllabus() {
+        if (confirm('Kya aap saara syllabus data clear karna chahte hain?')) {
+            currentSyllabus = [];
+            renderTable();
+        }
+    }
+
+    function downloadPDF() {
+        const element = document.getElementById('pdf-render-area');
+        
+        // Hide delete buttons during PDF generation
+        const deleteBtns = document.querySelectorAll('.btn-delete-row');
+        deleteBtns.forEach(btn => btn.style.display = 'none');
+
+        const opt = {
+            margin:       [0.2, 0.2, 0.2, 0.2],
+            filename:     'JEE_Syllabus_Tracker.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 3 },
+            jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+        };
+
+        html2pdf().set(opt).from(element).save().then(() => {
+            deleteBtns.forEach(btn => btn.style.display = '');
         });
     }
 
-    window.onload = buildTable;
+    document.getElementById('subjectSelect').addEventListener('change', renderTable);
+    window.onload = init;
 </script>
 
 </body>
