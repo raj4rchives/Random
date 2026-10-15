@@ -1,27 +1,21 @@
 const defaultPhysics = [
-    { name: "Basic Maths", total: 7 }, { name: "Motion in straight line", total: 8 },
-    { name: "Motion in plane", total: 7 }, { name: "Newton Law's of Motion", total: 11 },
-    { name: "Circular motion", total: 5 }, { name: "Work energy power", total: 6 },
-    { name: "Centre of mass", total: 11 }, { name: "Rotational motion", total: 15 },
-    { name: "Mechanical properties of solid", total: 1 }, { name: "Mechanical properties of fluids", total: 7 },
-    { name: "Thermal properties of matter", total: 5 }, { name: "Ktg and thermodynamics", total: 6 },
-    { name: "Simple harmonic motion", total: 5 }, { name: "Waves", total: 8 },
-    { name: "Electric charges and field", total: 9 }, { name: "Electrostatic potential capacitance", total: 8 },
-    { name: "Current Electricity", total: 7 }, { name: "Moving charges and Magnetism", total: 7 },
-    { name: "Electromagnetic induction", total: 6 }, { name: "Gravitation", total: 5 },
-    { name: "Alt current", total: 4 }, { name: "Ray OPTICS", total: 10 },
-    { name: "Electromagnetic waves", total: 2 }, { name: "Wave optics", total: 5 },
-    { name: "Modern phy", total: 10 }, { name: "Unit and measurement", total: 2 }, { name: "Semiconductor", total: 5 }
+    "Basic Maths", "Motion in straight line", "Motion in plane", "Newton Law's of Motion",
+    "Circular motion", "Work energy power", "Centre of mass", "Rotational motion",
+    "Mechanical properties of solid", "Mechanical properties of fluids", "Thermal properties of matter",
+    "Ktg and thermodynamics", "Simple harmonic motion", "Waves", "Electric charges and field",
+    "Electrostatic potential capacitance", "Current Electricity", "Moving charges and Magnetism",
+    "Electromagnetic induction", "Gravitation", "Alt current", "Ray OPTICS", "Electromagnetic waves",
+    "Wave optics", "Modern phy", "Unit and measurement", "Semiconductor"
 ];
 
 let syllabusData = {
-    Physics: [...defaultPhysics],
+    Physics: defaultPhysics.map(name => ({ name })),
     Chemistry: [],
     Mathematics: []
 };
 
 function init() {
-    const saved = localStorage.getItem('jee_all_subjects_tracker_v6');
+    const saved = localStorage.getItem('jee_all_subjects_tracker_v7');
     if (saved) {
         try {
             syllabusData = JSON.parse(saved);
@@ -39,7 +33,6 @@ function renderTableFor(subjectKey, tbodyId) {
             <tr>
                 <td><strong>${index + 1}</strong></td>
                 <td class="chap-cell">${item.name}</td>
-                <td><strong>${item.total}</strong></td>
                 <td><span class="box-tick"></span></td>
                 <td><span class="box-tick"></span></td>
                 <td><span class="box-tick"></span></td>
@@ -63,24 +56,22 @@ function renderAllTables() {
     renderTableFor('Physics', 'physicsTableBody');
     renderTableFor('Chemistry', 'chemistryTableBody');
     renderTableFor('Mathematics', 'mathematicsTableBody');
-    localStorage.setItem('jee_all_subjects_tracker_v6', JSON.stringify(syllabusData));
+    localStorage.setItem('jee_all_subjects_tracker_v7', JSON.stringify(syllabusData));
 }
 
 function addChapter() {
     const subject = document.getElementById('subjectSelect').value;
     const name = document.getElementById('chapNameInput').value.trim();
-    const total = document.getElementById('totLecInput').value.trim();
 
-    if (!name || !total) {
-        alert('Kripya Chapter Name aur Total Lectures dono fill karein!');
+    if (!name) {
+        alert('Kripya Chapter Name fill karein!');
         return;
     }
 
     if (!syllabusData[subject]) syllabusData[subject] = [];
-    syllabusData[subject].push({ name: name, total: total });
+    syllabusData[subject].push({ name: name });
 
     document.getElementById('chapNameInput').value = '';
-    document.getElementById('totLecInput').value = '';
     renderAllTables();
 }
 
@@ -117,7 +108,7 @@ function importJSON(event) {
             if (parsed.Physics || parsed.Chemistry || parsed.Mathematics) {
                 syllabusData = parsed;
             } else if (Array.isArray(parsed)) {
-                syllabusData.Physics = parsed;
+                syllabusData.Physics = parsed.map(i => ({ name: i.name || i }));
             }
             renderAllTables();
             alert('Data successfully import ho gaya hai!');
