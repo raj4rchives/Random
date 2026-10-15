@@ -134,10 +134,12 @@
         #pdf-render-area {
             background: white;
             color: #000;
+            width: 100%;
         }
 
         .subject-page {
-            padding: 15px;
+            padding: 10px;
+            margin-bottom: 30px;
             page-break-before: always;
         }
         .subject-page:first-child {
@@ -154,7 +156,7 @@
         }
 
         .pdf-title-main {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 900;
             text-transform: uppercase;
             color: #000;
@@ -162,7 +164,7 @@
         }
 
         .pdf-subtitle {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             color: #2563eb;
             text-transform: uppercase;
@@ -170,42 +172,45 @@
         }
 
         .pdf-meta {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             color: #000;
         }
 
+        /* Fixed Layout to prevent table overflow */
         table.tracker-table {
             width: 100%;
+            table-layout: fixed;
             border-collapse: collapse;
-            font-size: 11px;
+            font-size: 10px;
         }
 
         table.tracker-table th, 
         table.tracker-table td {
             border: 1px solid #000000 !important;
-            padding: 5px 3px;
+            padding: 4px 2px;
             text-align: center;
             vertical-align: middle;
             color: #000;
+            word-break: break-word;
         }
 
-        th.head-main { background-color: #f1f5f9; font-size: 10px; font-weight: 800; }
-        th.head-concept { background-color: #dbeafe; color: #1e40af; font-weight: 800; font-size: 10px; }
-        th.head-practice { background-color: #fef9c3; color: #854d0e; font-weight: 800; font-size: 10px; }
-        th.head-revision { background-color: #dcfce7; color: #166534; font-weight: 800; font-size: 10px; }
+        th.head-main { background-color: #f1f5f9; font-size: 9px; font-weight: 800; }
+        th.head-concept { background-color: #dbeafe; color: #1e40af; font-weight: 800; font-size: 9px; }
+        th.head-practice { background-color: #fef9c3; color: #854d0e; font-weight: 800; font-size: 9px; }
+        th.head-revision { background-color: #dcfce7; color: #166534; font-weight: 800; font-size: 9px; }
 
         td.chap-cell {
             text-align: left;
-            padding-left: 8px;
+            padding-left: 6px;
             font-weight: 700;
-            font-size: 11px;
+            font-size: 10px;
         }
 
         .box-tick {
             display: inline-block;
-            width: 13px;
-            height: 13px;
+            width: 11px;
+            height: 11px;
             border: 1px solid #000;
             border-radius: 2px;
             background: #fff;
@@ -217,7 +222,7 @@
             color: #ef4444;
             font-weight: bold;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 12px;
         }
 
         @media print {
@@ -265,7 +270,7 @@
             <input type="number" id="totLecInput" class="form-control" placeholder="e.g. 10">
         </div>
 
-        <button class="btn-add" onclick="addChapter()">+ Add Chapter to Subject</button>
+        <button type="button" class="btn-add" onclick="addChapter()">+ Add Chapter to Subject</button>
     </div>
 
     <p class="info-text">
@@ -287,26 +292,26 @@
                 <thead>
                     <tr>
                         <th rowspan="2" class="head-main" style="width: 25px;">#</th>
-                        <th rowspan="2" class="head-main" style="width: 170px;">CHAPTER NAME</th>
-                        <th rowspan="2" class="head-main" style="width: 45px;">TOTAL LEC</th>
-                        <th rowspan="2" class="head-main" style="width: 45px;">LEC COMP</th>
+                        <th rowspan="2" class="head-main" style="width: 155px;">CHAPTER NAME</th>
+                        <th rowspan="2" class="head-main" style="width: 40px;">TOTAL LEC</th>
+                        <th rowspan="2" class="head-main" style="width: 40px;">LEC COMP</th>
                         <th colspan="3" class="head-concept">CONCEPT MASTERY</th>
                         <th colspan="5" class="head-practice">PRACTICE & TESTING</th>
                         <th colspan="3" class="head-revision">REVISION ROUNDS</th>
-                        <th rowspan="2" class="head-main btn-delete-row"></th>
+                        <th rowspan="2" class="head-main btn-delete-row" style="width: 20px;"></th>
                     </tr>
                     <tr>
-                        <th class="head-main" style="width: 32px;">MAINS</th>
-                        <th class="head-main" style="width: 32px;">ADV</th>
-                        <th class="head-main" style="width: 38px;">NOTES</th>
-                        <th class="head-main" style="width: 32px;">DPP</th>
-                        <th class="head-main" style="width: 32px;">HW</th>
-                        <th class="head-main" style="width: 42px;">MODULE</th>
-                        <th class="head-main" style="width: 32px;">PYQ</th>
-                        <th class="head-main" style="width: 32px;">TEST</th>
-                        <th class="head-main" style="width: 28px;">R1</th>
-                        <th class="head-main" style="width: 28px;">R2</th>
-                        <th class="head-main" style="width: 28px;">R3</th>
+                        <th class="head-main">MAINS</th>
+                        <th class="head-main">ADV</th>
+                        <th class="head-main">NOTES</th>
+                        <th class="head-main">DPP</th>
+                        <th class="head-main">HW</th>
+                        <th class="head-main">MODULE</th>
+                        <th class="head-main">PYQ</th>
+                        <th class="head-main">TEST</th>
+                        <th class="head-main">R1</th>
+                        <th class="head-main">R2</th>
+                        <th class="head-main">R3</th>
                     </tr>
                 </thead>
                 <tbody id="physicsTableBody"></tbody>
@@ -326,26 +331,26 @@
                 <thead>
                     <tr>
                         <th rowspan="2" class="head-main" style="width: 25px;">#</th>
-                        <th rowspan="2" class="head-main" style="width: 170px;">CHAPTER NAME</th>
-                        <th rowspan="2" class="head-main" style="width: 45px;">TOTAL LEC</th>
-                        <th rowspan="2" class="head-main" style="width: 45px;">LEC COMP</th>
+                        <th rowspan="2" class="head-main" style="width: 155px;">CHAPTER NAME</th>
+                        <th rowspan="2" class="head-main" style="width: 40px;">TOTAL LEC</th>
+                        <th rowspan="2" class="head-main" style="width: 40px;">LEC COMP</th>
                         <th colspan="3" class="head-concept">CONCEPT MASTERY</th>
                         <th colspan="5" class="head-practice">PRACTICE & TESTING</th>
                         <th colspan="3" class="head-revision">REVISION ROUNDS</th>
-                        <th rowspan="2" class="head-main btn-delete-row"></th>
+                        <th rowspan="2" class="head-main btn-delete-row" style="width: 20px;"></th>
                     </tr>
                     <tr>
-                        <th class="head-main" style="width: 32px;">MAINS</th>
-                        <th class="head-main" style="width: 32px;">ADV</th>
-                        <th class="head-main" style="width: 38px;">NOTES</th>
-                        <th class="head-main" style="width: 32px;">DPP</th>
-                        <th class="head-main" style="width: 32px;">HW</th>
-                        <th class="head-main" style="width: 42px;">MODULE</th>
-                        <th class="head-main" style="width: 32px;">PYQ</th>
-                        <th class="head-main" style="width: 32px;">TEST</th>
-                        <th class="head-main" style="width: 28px;">R1</th>
-                        <th class="head-main" style="width: 28px;">R2</th>
-                        <th class="head-main" style="width: 28px;">R3</th>
+                        <th class="head-main">MAINS</th>
+                        <th class="head-main">ADV</th>
+                        <th class="head-main">NOTES</th>
+                        <th class="head-main">DPP</th>
+                        <th class="head-main">HW</th>
+                        <th class="head-main">MODULE</th>
+                        <th class="head-main">PYQ</th>
+                        <th class="head-main">TEST</th>
+                        <th class="head-main">R1</th>
+                        <th class="head-main">R2</th>
+                        <th class="head-main">R3</th>
                     </tr>
                 </thead>
                 <tbody id="chemistryTableBody"></tbody>
@@ -365,26 +370,26 @@
                 <thead>
                     <tr>
                         <th rowspan="2" class="head-main" style="width: 25px;">#</th>
-                        <th rowspan="2" class="head-main" style="width: 170px;">CHAPTER NAME</th>
-                        <th rowspan="2" class="head-main" style="width: 45px;">TOTAL LEC</th>
-                        <th rowspan="2" class="head-main" style="width: 45px;">LEC COMP</th>
+                        <th rowspan="2" class="head-main" style="width: 155px;">CHAPTER NAME</th>
+                        <th rowspan="2" class="head-main" style="width: 40px;">TOTAL LEC</th>
+                        <th rowspan="2" class="head-main" style="width: 40px;">LEC COMP</th>
                         <th colspan="3" class="head-concept">CONCEPT MASTERY</th>
                         <th colspan="5" class="head-practice">PRACTICE & TESTING</th>
                         <th colspan="3" class="head-revision">REVISION ROUNDS</th>
-                        <th rowspan="2" class="head-main btn-delete-row"></th>
+                        <th rowspan="2" class="head-main btn-delete-row" style="width: 20px;"></th>
                     </tr>
                     <tr>
-                        <th class="head-main" style="width: 32px;">MAINS</th>
-                        <th class="head-main" style="width: 32px;">ADV</th>
-                        <th class="head-main" style="width: 38px;">NOTES</th>
-                        <th class="head-main" style="width: 32px;">DPP</th>
-                        <th class="head-main" style="width: 32px;">HW</th>
-                        <th class="head-main" style="width: 42px;">MODULE</th>
-                        <th class="head-main" style="width: 32px;">PYQ</th>
-                        <th class="head-main" style="width: 32px;">TEST</th>
-                        <th class="head-main" style="width: 28px;">R1</th>
-                        <th class="head-main" style="width: 28px;">R2</th>
-                        <th class="head-main" style="width: 28px;">R3</th>
+                        <th class="head-main">MAINS</th>
+                        <th class="head-main">ADV</th>
+                        <th class="head-main">NOTES</th>
+                        <th class="head-main">DPP</th>
+                        <th class="head-main">HW</th>
+                        <th class="head-main">MODULE</th>
+                        <th class="head-main">PYQ</th>
+                        <th class="head-main">TEST</th>
+                        <th class="head-main">R1</th>
+                        <th class="head-main">R2</th>
+                        <th class="head-main">R3</th>
                     </tr>
                 </thead>
                 <tbody id="mathematicsTableBody"></tbody>
@@ -448,7 +453,7 @@
                     <td><span class="box-tick"></span></td>
                     <td><span class="box-tick"></span></td>
                     <td><span class="box-tick"></span></td>
-                    <td class="btn-delete-row"><button class="btn-delete-row" onclick="deleteChapter('${subjectKey}', ${index})">✕</button></td>
+                    <td class="btn-delete-row"><button type="button" class="btn-delete-row" onclick="deleteChapter('${subjectKey}', ${index})">✕</button></td>
                 </tr>
             `;
         });
@@ -507,4 +512,14 @@
         if (!file) return;
 
         const reader = new FileReader();
-        reader.onload = function(e
+        reader.onload = function(e) {
+            try {
+                const parsed = JSON.parse(e.target.result);
+                if (parsed.Physics || parsed.Chemistry || parsed.Mathematics) {
+                    syllabusData = parsed;
+                } else if (Array.isArray(parsed)) {
+                    syllabusData.Physics = parsed;
+                }
+                renderAllTables();
+                alert('Data successfully import ho gaya hai!');
+ 
