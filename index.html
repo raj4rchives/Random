@@ -32,18 +32,11 @@
             border: 1px solid #cbd5e1;
         }
 
-        /* Top Bar & Actions */
         .top-header {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 20px;
-        }
-
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .header-title h1 {
@@ -54,16 +47,16 @@
 
         .action-grid {
             display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 12px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
             margin-bottom: 20px;
         }
 
         .btn {
-            padding: 12px 16px;
+            padding: 10px 12px;
             border-radius: 10px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             border: none;
             cursor: pointer;
             display: flex;
@@ -74,24 +67,30 @@
         }
 
         .btn-clear {
-            background-color: #dbeafe;
-            color: #1e40af;
+            background-color: #fee2e2;
+            color: #991b1b;
         }
+        .btn-clear:hover { background-color: #fecaca; }
 
-        .btn-clear:hover {
-            background-color: #bfdbfe;
+        .btn-export {
+            background-color: #fef9c3;
+            color: #854d0e;
         }
+        .btn-export:hover { background-color: #fef08a; }
+
+        .btn-import {
+            background-color: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+        .btn-import:hover { background-color: #e2e8f0; }
 
         .btn-download {
             background-color: #2563eb;
             color: white;
         }
+        .btn-download:hover { background-color: #1d4ed8; }
 
-        .btn-download:hover {
-            background-color: #1d4ed8;
-        }
-
-        /* Input Form Container */
         .form-card {
             border: 1.5px solid #94a3b8;
             border-radius: 14px;
@@ -137,10 +136,7 @@
             cursor: pointer;
             margin-top: 8px;
         }
-
-        .btn-add:hover {
-            background-color: #1d4ed8;
-        }
+        .btn-add:hover { background-color: #1d4ed8; }
 
         .info-text {
             font-size: 12px;
@@ -149,7 +145,7 @@
             line-height: 1.5;
         }
 
-        /* --- PDF PRINT TEMPLATE (Exact Image 1 Style) --- */
+        /* --- PDF PRINT TEMPLATE --- */
         #pdf-render-area {
             background: white;
             padding: 15px;
@@ -188,7 +184,6 @@
             color: #000;
         }
 
-        /* Exact Black Borders & Layout */
         table.tracker-table {
             width: 100%;
             border-collapse: collapse;
@@ -197,40 +192,17 @@
 
         table.tracker-table th, 
         table.tracker-table td {
-            border: 1px solid #000000 !important; /* Strict Black Borders */
+            border: 1px solid #000000 !important;
             padding: 5px 3px;
             text-align: center;
             vertical-align: middle;
             color: #000;
         }
 
-        /* Colored Section Headers */
-        th.head-main {
-            background-color: #f1f5f9;
-            font-size: 10px;
-            font-weight: 800;
-        }
-
-        th.head-concept {
-            background-color: #dbeafe;
-            color: #1e40af;
-            font-weight: 800;
-            font-size: 10px;
-        }
-
-        th.head-practice {
-            background-color: #fef9c3;
-            color: #854d0e;
-            font-weight: 800;
-            font-size: 10px;
-        }
-
-        th.head-revision {
-            background-color: #dcfce7;
-            color: #166534;
-            font-weight: 800;
-            font-size: 10px;
-        }
+        th.head-main { background-color: #f1f5f9; font-size: 10px; font-weight: 800; }
+        th.head-concept { background-color: #dbeafe; color: #1e40af; font-weight: 800; font-size: 10px; }
+        th.head-practice { background-color: #fef9c3; color: #854d0e; font-weight: 800; font-size: 10px; }
+        th.head-revision { background-color: #dcfce7; color: #166534; font-weight: 800; font-size: 10px; }
 
         td.chap-cell {
             text-align: left;
@@ -265,7 +237,6 @@
 <body>
 
 <div class="app-card">
-    <!-- Header -->
     <div class="top-header">
         <div class="header-title">
             <span style="font-size: 24px;">📚</span>
@@ -275,8 +246,11 @@
 
     <!-- Action Buttons -->
     <div class="action-grid">
-        <button class="btn btn-clear" onclick="clearSyllabus()">Clear Syllabus</button>
-        <button class="btn btn-download" onclick="downloadPDF()">📄 Download A4 PDF</button>
+        <button class="btn btn-clear" onclick="clearSyllabus()">Clear</button>
+        <button class="btn btn-export" onclick="exportJSON()">📤 Export</button>
+        <button class="btn btn-import" onclick="document.getElementById('importFile').click()">📥 Import</button>
+        <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importJSON(event)">
+        <button class="btn btn-download" onclick="downloadPDF()">📄 PDF</button>
     </div>
 
     <!-- Input Form -->
@@ -304,10 +278,10 @@
     </div>
 
     <p class="info-text">
-        Bas Subject, Chapter Name aur Total Lectures dalo. PDF me A4 Landscape print karke offline tick kar sakte ho.
+        Aap Export button se apna data save file ke roop mein nikal sakte hain aur Import se wapas la sakte hain.
     </p>
 
-    <!-- PDF Printable Container (Image 1 Format) -->
+    <!-- PDF Printable Container -->
     <div id="pdf-render-area">
         <div class="pdf-header-row">
             <div>
@@ -346,14 +320,12 @@
                 </tr>
             </thead>
             <tbody id="chapterTableBody">
-                <!-- Chapters will be rendered here dynamically -->
             </tbody>
         </table>
     </div>
 </div>
 
 <script>
-    // Default Initial Chapters Data
     const defaultData = [
         { name: "Basic Maths", total: 7 },
         { name: "Motion in Straight Line", total: 8 },
@@ -441,10 +413,41 @@
         }
     }
 
+    function exportJSON() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentSyllabus, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", "jee_syllabus_backup.json");
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+    }
+
+    function importJSON(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const parsed = JSON.parse(e.target.result);
+                if (Array.isArray(parsed)) {
+                    currentSyllabus = parsed;
+                    renderTable();
+                    alert('Syllabus successfully import ho gaya hai!');
+                } else {
+                    alert('Invalid JSON file format!');
+                }
+            } catch (err) {
+                alert('File read karne mein error aayi hai.');
+            }
+        };
+        reader.readAsText(file);
+        event.target.value = ''; // reset file input
+    }
+
     function downloadPDF() {
         const element = document.getElementById('pdf-render-area');
-        
-        // Hide delete buttons during PDF generation
         const deleteBtns = document.querySelectorAll('.btn-delete-row');
         deleteBtns.forEach(btn => btn.style.display = 'none');
 
@@ -466,4 +469,5 @@
 </script>
 
 </body>
-</html>
+    </html>
+    
