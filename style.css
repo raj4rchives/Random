@@ -133,6 +133,7 @@ body {
     padding: 20px;
     margin-bottom: 40px;
     page-break-before: always;
+    page-break-inside: avoid; /* Prevents splitting page inside */
     background: white;
 }
 .subject-page:first-child {
@@ -146,6 +147,7 @@ body {
     border-bottom: 2px solid #000;
     padding-bottom: 6px;
     margin-bottom: 15px;
+    page-break-inside: avoid;
 }
 
 .pdf-title-main {
@@ -175,6 +177,12 @@ table.tracker-table {
     table-layout: fixed;
     border-collapse: collapse;
     font-size: 11px;
+    page-break-inside: auto;
+}
+
+table.tracker-table tr {
+    page-break-inside: avoid; /* Prevents any single table row from splitting across pages */
+    page-break-after: auto;
 }
 
 table.tracker-table th, 
@@ -221,4 +229,4 @@ td.chap-cell {
 
 @media print {
     .btn-delete-row { display: none; }
-                 }
+}
