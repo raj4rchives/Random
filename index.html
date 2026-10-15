@@ -151,7 +151,7 @@
             justify-content: space-between;
             align-items: flex-end;
             border-bottom: 2px solid #000;
-            padding-bottom: 4px;
+            padding-bottom: 6px;
             margin-bottom: 10px;
         }
 
@@ -177,40 +177,43 @@
             color: #000;
         }
 
-        /* Fixed Layout to prevent table overflow */
+        /* Strict Table Layout to prevent column vertical text crunching */
         table.tracker-table {
             width: 100%;
             table-layout: fixed;
             border-collapse: collapse;
-            font-size: 10px;
+            font-size: 9px;
         }
 
         table.tracker-table th, 
         table.tracker-table td {
             border: 1px solid #000000 !important;
-            padding: 4px 2px;
+            padding: 4px 1px;
             text-align: center;
             vertical-align: middle;
             color: #000;
-            word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-        th.head-main { background-color: #f1f5f9; font-size: 9px; font-weight: 800; }
-        th.head-concept { background-color: #dbeafe; color: #1e40af; font-weight: 800; font-size: 9px; }
-        th.head-practice { background-color: #fef9c3; color: #854d0e; font-weight: 800; font-size: 9px; }
-        th.head-revision { background-color: #dcfce7; color: #166534; font-weight: 800; font-size: 9px; }
+        th.head-main { background-color: #f1f5f9; font-size: 8px; font-weight: 800; }
+        th.head-concept { background-color: #dbeafe; color: #1e40af; font-weight: 800; font-size: 8px; }
+        th.head-practice { background-color: #fef9c3; color: #854d0e; font-weight: 800; font-size: 8px; }
+        th.head-revision { background-color: #dcfce7; color: #166534; font-weight: 800; font-size: 8px; }
 
         td.chap-cell {
             text-align: left;
             padding-left: 6px;
             font-weight: 700;
             font-size: 10px;
+            white-space: normal !important;
         }
 
         .box-tick {
             display: inline-block;
-            width: 11px;
-            height: 11px;
+            width: 10px;
+            height: 10px;
             border: 1px solid #000;
             border-radius: 2px;
             background: #fff;
@@ -222,7 +225,7 @@
             color: #ef4444;
             font-weight: bold;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         @media print {
@@ -242,11 +245,11 @@
 
     <!-- Action Buttons -->
     <div class="action-grid">
-        <button class="btn btn-clear" onclick="clearAll()">Clear All</button>
-        <button class="btn btn-export" onclick="exportJSON()">📤 Export</button>
-        <button class="btn btn-import" onclick="document.getElementById('importFile').click()">📥 Import</button>
+        <button type="button" class="btn btn-clear" onclick="clearAll()">Clear All</button>
+        <button type="button" class="btn btn-export" onclick="exportJSON()">📤 Export</button>
+        <button type="button" class="btn btn-import" onclick="document.getElementById('importFile').click()">📥 Import</button>
         <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importJSON(event)">
-        <button class="btn btn-download" onclick="downloadPDF()">📄 Download PDF</button>
+        <button type="button" class="btn btn-download" onclick="downloadPDF()">📄 Download PDF</button>
     </div>
 
     <!-- Input Form -->
@@ -289,29 +292,47 @@
                 <div class="pdf-meta">Candidate Name: _____________________</div>
             </div>
             <table class="tracker-table">
+                <colgroup>
+                    <col style="width: 25px;">
+                    <col style="width: 170px;">
+                    <col style="width: 42px;">
+                    <col style="width: 42px;">
+                    <col style="width: 32px;">
+                    <col style="width: 32px;">
+                    <col style="width: 38px;">
+                    <col style="width: 32px;">
+                    <col style="width: 32px;">
+                    <col style="width: 45px;">
+                    <col style="width: 32px;">
+                    <col style="width: 32px;">
+                    <col style="width: 28px;">
+                    <col style="width: 28px;">
+                    <col style="width: 28px;">
+                    <col style="width: 20px;">
+                </colgroup>
                 <thead>
                     <tr>
-                        <th rowspan="2" class="head-main" style="width: 25px;">#</th>
-                        <th rowspan="2" class="head-main" style="width: 155px;">CHAPTER NAME</th>
-                        <th rowspan="2" class="head-main" style="width: 40px;">TOTAL LEC</th>
-                        <th rowspan="2" class="head-main" style="width: 40px;">LEC COMP</th>
+                        <th rowspan="2" class="head-main">#</th>
+                        <th rowspan="2" class="head-main">CHAPTER NAME</th>
+                        <th rowspan="2" class="head-main">TOTAL LEC</th>
+                        <th rowspan="2" class="head-main">LEC COMP</th>
                         <th colspan="3" class="head-concept">CONCEPT MASTERY</th>
                         <th colspan="5" class="head-practice">PRACTICE & TESTING</th>
                         <th colspan="3" class="head-revision">REVISION ROUNDS</th>
-                        <th rowspan="2" class="head-main btn-delete-row" style="width: 20px;"></th>
+                        <th rowspan="2" class="head-main btn-delete-row"></th>
                     </tr>
                     <tr>
-                        <th class="head-main">MAINS</th>
-                        <th class="head-main">ADV</th>
-                        <th class="head-main">NOTES</th>
-                        <th class="head-main">DPP</th>
-                        <th class="head-main">HW</th>
-                        <th class="head-main">MODULE</th>
-                        <th class="head-main">PYQ</th>
-                        <th class="head-main">TEST</th>
-                        <th class="head-main">R1</th>
-                        <th class="head-main">R2</th>
-                        <th class="head-main">R3</th>
+                        <th class="head-concept">MAINS</th>
+                        <th class="head-concept">ADV</th>
+                        <th class="head-concept">NOTES</th>
+                        <th class="head-practice">DPP</th>
+                        <th class="head-practice">HW</th>
+                        <th class="head-practice">MOD</th>
+                        <th class="head-practice">PYQ</th>
+                        <th class="head-practice">TEST</th>
+                        <th class="head-revision">R1</th>
+                        <th class="head-revision">R2</th>
+                        <th class="head-revision">R3</th>
                     </tr>
                 </thead>
                 <tbody id="physicsTableBody"></tbody>
@@ -328,29 +349,47 @@
                 <div class="pdf-meta">Candidate Name: _____________________</div>
             </div>
             <table class="tracker-table">
+                <colgroup>
+                    <col style="width: 25px;">
+                    <col style="width: 170px;">
+                    <col style="width: 42px;">
+                    <col style="width: 42px;">
+                    <col style="width: 32px;">
+                    <col style="width: 32px;">
+                    <col style="width: 38px;">
+                    <col style="width: 32px;">
+                    <col style="width: 32px;">
+                    <col style="width: 45px;">
+                    <col style="width: 32px;">
+                    <col style="width: 32px;">
+                    <col style="width: 28px;">
+                    <col style="width: 28px;">
+                    <col style="width: 28px;">
+                    <col style="width: 20px;">
+                </colgroup>
                 <thead>
                     <tr>
-                        <th rowspan="2" class="head-main" style="width: 25px;">#</th>
-                        <th rowspan="2" class="head-main" style="width: 155px;">CHAPTER NAME</th>
-                        <th rowspan="2" class="head-main" style="width: 40px;">TOTAL LEC</th>
-                        <th rowspan="2" class="head-main" style="width: 40px;">LEC COMP</th>
+                        <th rowspan="2" class="head-main">#</th>
+                        <th rowspan="2" class="head-main">CHAPTER NAME</th>
+                        <th rowspan="2" class="head-main">TOTAL LEC</th>
+                        <th rowspan="2" class="head-main">LEC COMP</th>
                         <th colspan="3" class="head-concept">CONCEPT MASTERY</th>
                         <th colspan="5" class="head-practice">PRACTICE & TESTING</th>
                         <th colspan="3" class="head-revision">REVISION ROUNDS</th>
-                        <th rowspan="2" class="head-main btn-delete-row" style="width: 20px;"></th>
+                        <th rowspan="2" class="head-main btn-delete-row"></th>
                     </tr>
                     <tr>
-                        <th class="head-main">MAINS</th>
-                        <th class="head-main">ADV</th>
-                        <th class="head-main">NOTES</th>
-                        <th class="head-main">DPP</th>
-                        <th class="head-main">HW</th>
-                        <th class="head-main">MODULE</th>
-                        <th class="head-main">PYQ</th>
-                        <th class="head-main">TEST</th>
-                        <th class="head-main">R1</th>
-                        <th class="head-main">R2</th>
-                        <th class="head-main">R3</th>
+                        <th class="head-concept">MAINS</th>
+                        <th class="head-concept">ADV</th>
+                        <th class="head-concept">NOTES</th>
+                        <th class="head-practice">DPP</th>
+                        <th class="head-practice">HW</th>
+                        <th class="head-practice">MOD</th>
+                        <th class="head-practice">PYQ</th>
+                        <th class="head-practice">TEST</th>
+                        <th class="head-revision">R1</th>
+                        <th class="head-revision">R2</th>
+                        <th class="head-revision">R3</th>
                     </tr>
                 </thead>
                 <tbody id="chemistryTableBody"></tbody>
@@ -367,29 +406,47 @@
                 <div class="pdf-meta">Candidate Name: _____________________</div>
             </div>
             <table class="tracker-table">
+                <colgroup>
+                    <col style="width: 25px;">
+                    <col style="width: 170px;">
+                    <col style="width: 42px;">
+                    <col style="width: 42px;">
+                    <col style="width: 32px;">
+                    <col style="width: 32px;">
+                    <col style="width: 38px;">
+                    <col style="width: 32px;">
+                    <col style="width: 32px;">
+                    <col style="width: 45px;">
+                    <col style="width: 32px;">
+                    <col style="width: 32px;">
+                    <col style="width: 28px;">
+                    <col style="width: 28px;">
+                    <col style="width: 28px;">
+                    <col style="width: 20px;">
+                </colgroup>
                 <thead>
                     <tr>
-                        <th rowspan="2" class="head-main" style="width: 25px;">#</th>
-                        <th rowspan="2" class="head-main" style="width: 155px;">CHAPTER NAME</th>
-                        <th rowspan="2" class="head-main" style="width: 40px;">TOTAL LEC</th>
-                        <th rowspan="2" class="head-main" style="width: 40px;">LEC COMP</th>
+                        <th rowspan="2" class="head-main">#</th>
+                        <th rowspan="2" class="head-main">CHAPTER NAME</th>
+                        <th rowspan="2" class="head-main">TOTAL LEC</th>
+                        <th rowspan="2" class="head-main">LEC COMP</th>
                         <th colspan="3" class="head-concept">CONCEPT MASTERY</th>
                         <th colspan="5" class="head-practice">PRACTICE & TESTING</th>
                         <th colspan="3" class="head-revision">REVISION ROUNDS</th>
-                        <th rowspan="2" class="head-main btn-delete-row" style="width: 20px;"></th>
+                        <th rowspan="2" class="head-main btn-delete-row"></th>
                     </tr>
                     <tr>
-                        <th class="head-main">MAINS</th>
-                        <th class="head-main">ADV</th>
-                        <th class="head-main">NOTES</th>
-                        <th class="head-main">DPP</th>
-                        <th class="head-main">HW</th>
-                        <th class="head-main">MODULE</th>
-                        <th class="head-main">PYQ</th>
-                        <th class="head-main">TEST</th>
-                        <th class="head-main">R1</th>
-                        <th class="head-main">R2</th>
-                        <th class="head-main">R3</th>
+                        <th class="head-concept">MAINS</th>
+                        <th class="head-concept">ADV</th>
+                        <th class="head-concept">NOTES</th>
+                        <th class="head-practice">DPP</th>
+                        <th class="head-practice">HW</th>
+                        <th class="head-practice">MOD</th>
+                        <th class="head-practice">PYQ</th>
+                        <th class="head-practice">TEST</th>
+                        <th class="head-revision">R1</th>
+                        <th class="head-revision">R2</th>
+                        <th class="head-revision">R3</th>
                     </tr>
                 </thead>
                 <tbody id="mathematicsTableBody"></tbody>
@@ -422,7 +479,7 @@
     };
 
     function init() {
-        const saved = localStorage.getItem('jee_all_subjects_tracker');
+        const saved = localStorage.getItem('jee_all_subjects_tracker_v2');
         if (saved) {
             try {
                 syllabusData = JSON.parse(saved);
@@ -460,66 +517,4 @@
         tbody.innerHTML = html;
     }
 
-    function renderAllTables() {
-        renderTableFor('Physics', 'physicsTableBody');
-        renderTableFor('Chemistry', 'chemistryTableBody');
-        renderTableFor('Mathematics', 'mathematicsTableBody');
-        localStorage.setItem('jee_all_subjects_tracker', JSON.stringify(syllabusData));
-    }
-
-    function addChapter() {
-        const subject = document.getElementById('subjectSelect').value;
-        const name = document.getElementById('chapNameInput').value.trim();
-        const total = document.getElementById('totLecInput').value.trim();
-
-        if (!name || !total) {
-            alert('Kripya Chapter Name aur Total Lectures dono fill karein!');
-            return;
-        }
-
-        if (!syllabusData[subject]) syllabusData[subject] = [];
-        syllabusData[subject].push({ name: name, total: total });
-
-        document.getElementById('chapNameInput').value = '';
-        document.getElementById('totLecInput').value = '';
-        renderAllTables();
-    }
-
-    function deleteChapter(subject, index) {
-        syllabusData[subject].splice(index, 1);
-        renderAllTables();
-    }
-
-    function clearAll() {
-        if (confirm('Kya aap saare subjects ka data clear karna chahte hain?')) {
-            syllabusData = { Physics: [], Chemistry: [], Mathematics: [] };
-            renderAllTables();
-        }
-    }
-
-    function exportJSON() {
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(syllabusData, null, 2));
-        const downloadAnchor = document.createElement('a');
-        downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", "jee_all_subjects_backup.json");
-        document.body.appendChild(downloadAnchor);
-        downloadAnchor.click();
-        downloadAnchor.remove();
-    }
-
-    function importJSON(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const parsed = JSON.parse(e.target.result);
-                if (parsed.Physics || parsed.Chemistry || parsed.Mathematics) {
-                    syllabusData = parsed;
-                } else if (Array.isArray(parsed)) {
-                    syllabusData.Physics = parsed;
-                }
-                renderAllTables();
-                alert('Data successfully import ho gaya hai!');
- 
+  
