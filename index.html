@@ -6,232 +6,7 @@
     <title>JEE Master Syllabus Tracker - Physics, Chem, Math</title>
     <!-- html2pdf.js for clean PDF export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
-        body {
-            background-color: #f1f5f9;
-            color: #1e293b;
-            padding: 15px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .app-card {
-            width: 100%;
-            max-width: 950px;
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border: 1px solid #cbd5e1;
-        }
-
-        .top-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .header-title h1 {
-            font-size: 22px;
-            font-weight: 800;
-            color: #0f172a;
-        }
-
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            padding: 10px 12px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 13px;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: all 0.2s;
-        }
-
-        .btn-clear { background-color: #fee2e2; color: #991b1b; }
-        .btn-clear:hover { background-color: #fecaca; }
-
-        .btn-export { background-color: #fef9c3; color: #854d0e; }
-        .btn-export:hover { background-color: #fef08a; }
-
-        .btn-import { background-color: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
-        .btn-import:hover { background-color: #e2e8f0; }
-
-        .btn-download { background-color: #2563eb; color: white; }
-        .btn-download:hover { background-color: #1d4ed8; }
-
-        .form-card {
-            border: 1.5px solid #94a3b8;
-            border-radius: 14px;
-            padding: 18px;
-            background-color: #ffffff;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #475569;
-            margin-bottom: 6px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 10px 14px;
-            border-radius: 8px;
-            border: 1.5px solid #cbd5e1;
-            font-size: 14px;
-            outline: none;
-        }
-
-        .form-control:focus { border-color: #2563eb; }
-
-        .btn-add {
-            width: 100%;
-            background-color: #2563eb;
-            color: white;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 15px;
-            border: none;
-            cursor: pointer;
-            margin-top: 8px;
-        }
-        .btn-add:hover { background-color: #1d4ed8; }
-
-        .info-text {
-            font-size: 12px;
-            color: #64748b;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        /* --- PDF PRINT TEMPLATE & SUBJECT PAGES --- */
-        #pdf-render-area {
-            background: white;
-            color: #000;
-            width: 100%;
-        }
-
-        .subject-page {
-            padding: 10px;
-            margin-bottom: 30px;
-            page-break-before: always;
-        }
-        .subject-page:first-child {
-            page-break-before: avoid;
-        }
-
-        .pdf-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            border-bottom: 2px solid #000;
-            padding-bottom: 6px;
-            margin-bottom: 10px;
-        }
-
-        .pdf-title-main {
-            font-size: 16px;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: #000;
-            letter-spacing: 0.5px;
-        }
-
-        .pdf-subtitle {
-            font-size: 10px;
-            font-weight: 700;
-            color: #2563eb;
-            text-transform: uppercase;
-            margin-top: 2px;
-        }
-
-        .pdf-meta {
-            font-size: 10px;
-            font-weight: 700;
-            color: #000;
-        }
-
-        /* Strict Table Layout to prevent column vertical text crunching */
-        table.tracker-table {
-            width: 100%;
-            table-layout: fixed;
-            border-collapse: collapse;
-            font-size: 9px;
-        }
-
-        table.tracker-table th, 
-        table.tracker-table td {
-            border: 1px solid #000000 !important;
-            padding: 4px 1px;
-            text-align: center;
-            vertical-align: middle;
-            color: #000;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        th.head-main { background-color: #f1f5f9; font-size: 8px; font-weight: 800; }
-        th.head-concept { background-color: #dbeafe; color: #1e40af; font-weight: 800; font-size: 8px; }
-        th.head-practice { background-color: #fef9c3; color: #854d0e; font-weight: 800; font-size: 8px; }
-        th.head-revision { background-color: #dcfce7; color: #166534; font-weight: 800; font-size: 8px; }
-
-        td.chap-cell {
-            text-align: left;
-            padding-left: 6px;
-            font-weight: 700;
-            font-size: 10px;
-            white-space: normal !important;
-        }
-
-        .box-tick {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border: 1px solid #000;
-            border-radius: 2px;
-            background: #fff;
-        }
-
-        .btn-delete-row {
-            background: none;
-            border: none;
-            color: #ef4444;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 11px;
-        }
-
-        @media print {
-            .btn-delete-row { display: none; }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -293,22 +68,10 @@
             </div>
             <table class="tracker-table">
                 <colgroup>
-                    <col style="width: 25px;">
-                    <col style="width: 170px;">
-                    <col style="width: 42px;">
-                    <col style="width: 42px;">
-                    <col style="width: 32px;">
-                    <col style="width: 32px;">
-                    <col style="width: 38px;">
-                    <col style="width: 32px;">
-                    <col style="width: 32px;">
-                    <col style="width: 45px;">
-                    <col style="width: 32px;">
-                    <col style="width: 32px;">
-                    <col style="width: 28px;">
-                    <col style="width: 28px;">
-                    <col style="width: 28px;">
-                    <col style="width: 20px;">
+                    <col style="width: 35px;"><col style="width: 230px;"><col style="width: 55px;"><col style="width: 55px;">
+                    <col style="width: 45px;"><col style="width: 45px;"><col style="width: 50px;"><col style="width: 45px;">
+                    <col style="width: 45px;"><col style="width: 60px;"><col style="width: 45px;"><col style="width: 45px;">
+                    <col style="width: 45px;"><col style="width: 45px;"><col style="width: 45px;"><col style="width: 35px;">
                 </colgroup>
                 <thead>
                     <tr>
@@ -322,17 +85,10 @@
                         <th rowspan="2" class="head-main btn-delete-row"></th>
                     </tr>
                     <tr>
-                        <th class="head-concept">MAINS</th>
-                        <th class="head-concept">ADV</th>
-                        <th class="head-concept">NOTES</th>
-                        <th class="head-practice">DPP</th>
-                        <th class="head-practice">HW</th>
-                        <th class="head-practice">MOD</th>
-                        <th class="head-practice">PYQ</th>
-                        <th class="head-practice">TEST</th>
-                        <th class="head-revision">R1</th>
-                        <th class="head-revision">R2</th>
-                        <th class="head-revision">R3</th>
+                        <th class="head-concept">MAINS</th><th class="head-concept">ADV</th><th class="head-concept">NOTES</th>
+                        <th class="head-practice">DPP</th><th class="head-practice">HW</th><th class="head-practice">MOD</th>
+                        <th class="head-practice">PYQ</th><th class="head-practice">TEST</th>
+                        <th class="head-revision">R1</th><th class="head-revision">R2</th><th class="head-revision">R3</th>
                     </tr>
                 </thead>
                 <tbody id="physicsTableBody"></tbody>
@@ -350,22 +106,10 @@
             </div>
             <table class="tracker-table">
                 <colgroup>
-                    <col style="width: 25px;">
-                    <col style="width: 170px;">
-                    <col style="width: 42px;">
-                    <col style="width: 42px;">
-                    <col style="width: 32px;">
-                    <col style="width: 32px;">
-                    <col style="width: 38px;">
-                    <col style="width: 32px;">
-                    <col style="width: 32px;">
-                    <col style="width: 45px;">
-                    <col style="width: 32px;">
-                    <col style="width: 32px;">
-                    <col style="width: 28px;">
-                    <col style="width: 28px;">
-                    <col style="width: 28px;">
-                    <col style="width: 20px;">
+                    <col style="width: 35px;"><col style="width: 230px;"><col style="width: 55px;"><col style="width: 55px;">
+                    <col style="width: 45px;"><col style="width: 45px;"><col style="width: 50px;"><col style="width: 45px;">
+                    <col style="width: 45px;"><col style="width: 60px;"><col style="width: 45px;"><col style="width: 45px;">
+                    <col style="width: 45px;"><col style="width: 45px;"><col style="width: 45px;"><col style="width: 35px;">
                 </colgroup>
                 <thead>
                     <tr>
@@ -379,17 +123,10 @@
                         <th rowspan="2" class="head-main btn-delete-row"></th>
                     </tr>
                     <tr>
-                        <th class="head-concept">MAINS</th>
-                        <th class="head-concept">ADV</th>
-                        <th class="head-concept">NOTES</th>
-                        <th class="head-practice">DPP</th>
-                        <th class="head-practice">HW</th>
-                        <th class="head-practice">MOD</th>
-                        <th class="head-practice">PYQ</th>
-                        <th class="head-practice">TEST</th>
-                        <th class="head-revision">R1</th>
-                        <th class="head-revision">R2</th>
-                        <th class="head-revision">R3</th>
+                        <th class="head-concept">MAINS</th><th class="head-concept">ADV</th><th class="head-concept">NOTES</th>
+                        <th class="head-practice">DPP</th><th class="head-practice">HW</th><th class="head-practice">MOD</th>
+                        <th class="head-practice">PYQ</th><th class="head-practice">TEST</th>
+                        <th class="head-revision">R1</th><th class="head-revision">R2</th><th class="head-revision">R3</th>
                     </tr>
                 </thead>
                 <tbody id="chemistryTableBody"></tbody>
@@ -407,22 +144,10 @@
             </div>
             <table class="tracker-table">
                 <colgroup>
-                    <col style="width: 25px;">
-                    <col style="width: 170px;">
-                    <col style="width: 42px;">
-                    <col style="width: 42px;">
-                    <col style="width: 32px;">
-                    <col style="width: 32px;">
-                    <col style="width: 38px;">
-                    <col style="width: 32px;">
-                    <col style="width: 32px;">
-                    <col style="width: 45px;">
-                    <col style="width: 32px;">
-                    <col style="width: 32px;">
-                    <col style="width: 28px;">
-                    <col style="width: 28px;">
-                    <col style="width: 28px;">
-                    <col style="width: 20px;">
+                    <col style="width: 35px;"><col style="width: 230px;"><col style="width: 55px;"><col style="width: 55px;">
+                    <col style="width: 45px;"><col style="width: 45px;"><col style="width: 50px;"><col style="width: 45px;">
+                    <col style="width: 45px;"><col style="width: 60px;"><col style="width: 45px;"><col style="width: 45px;">
+                    <col style="width: 45px;"><col style="width: 45px;"><col style="width: 45px;"><col style="width: 35px;">
                 </colgroup>
                 <thead>
                     <tr>
@@ -436,17 +161,10 @@
                         <th rowspan="2" class="head-main btn-delete-row"></th>
                     </tr>
                     <tr>
-                        <th class="head-concept">MAINS</th>
-                        <th class="head-concept">ADV</th>
-                        <th class="head-concept">NOTES</th>
-                        <th class="head-practice">DPP</th>
-                        <th class="head-practice">HW</th>
-                        <th class="head-practice">MOD</th>
-                        <th class="head-practice">PYQ</th>
-                        <th class="head-practice">TEST</th>
-                        <th class="head-revision">R1</th>
-                        <th class="head-revision">R2</th>
-                        <th class="head-revision">R3</th>
+                        <th class="head-concept">MAINS</th><th class="head-concept">ADV</th><th class="head-concept">NOTES</th>
+                        <th class="head-practice">DPP</th><th class="head-practice">HW</th><th class="head-practice">MOD</th>
+                        <th class="head-practice">PYQ</th><th class="head-practice">TEST</th>
+                        <th class="head-revision">R1</th><th class="head-revision">R2</th><th class="head-revision">R3</th>
                     </tr>
                 </thead>
                 <tbody id="mathematicsTableBody"></tbody>
@@ -455,66 +173,7 @@
     </div>
 </div>
 
-<script>
-    const defaultPhysics = [
-        { name: "Basic Maths", total: 7 }, { name: "Motion in straight line", total: 8 },
-        { name: "Motion in plane", total: 7 }, { name: "Newton Law's of Motion", total: 11 },
-        { name: "Circular motion", total: 5 }, { name: "Work energy power", total: 6 },
-        { name: "Centre of mass", total: 11 }, { name: "Rotational motion", total: 15 },
-        { name: "Mechanical properties of solid", total: 1 }, { name: "Mechanical properties of fluids", total: 7 },
-        { name: "Thermal properties of matter", total: 5 }, { name: "Ktg and thermodynamics", total: 6 },
-        { name: "Simple harmonic motion", total: 5 }, { name: "Waves", total: 8 },
-        { name: "Electric charges and field", total: 9 }, { name: "Electrostatic potential capacitance", total: 8 },
-        { name: "Current Electricity", total: 7 }, { name: "Moving charges and Magnetism", total: 7 },
-        { name: "Electromagnetic induction", total: 6 }, { name: "Gravitation", total: 5 },
-        { name: "Alt current", total: 4 }, { name: "Ray OPTICS", total: 10 },
-        { name: "Electromagnetic waves", total: 2 }, { name: "Wave optics", total: 5 },
-        { name: "Modern phy", total: 10 }, { name: "Unit and measurement", total: 2 }, { name: "Semiconductor", total: 5 }
-    ];
-
-    let syllabusData = {
-        Physics: [...defaultPhysics],
-        Chemistry: [],
-        Mathematics: []
-    };
-
-    function init() {
-        const saved = localStorage.getItem('jee_all_subjects_tracker_v2');
-        if (saved) {
-            try {
-                syllabusData = JSON.parse(saved);
-            } catch (e) {}
-        }
-        renderAllTables();
-    }
-
-    function renderTableFor(subjectKey, tbodyId) {
-        const tbody = document.getElementById(tbodyId);
-        const list = syllabusData[subjectKey] || [];
-        let html = '';
-        list.forEach((item, index) => {
-            html += `
-                <tr>
-                    <td><strong>${index + 1}</strong></td>
-                    <td class="chap-cell">${item.name}</td>
-                    <td><strong>${item.total}</strong></td>
-                    <td><span class="box-tick"></span></td>
-                    <td><span class="box-tick"></span></td>
-                    <td><span class="box-tick"></span></td>
-                    <td><span class="box-tick"></span></td>
-                    <td><span class="box-tick"></span></td>
-                    <td><span class="box-tick"></span></td>
-                    <td><span class="box-tick"></span></td>
-                    <td><span class="box-tick"></span></td>
-                    <td><span class="box-tick"></span></td>
-                    <td><span class="box-tick"></span></td>
-                    <td><span class="box-tick"></span></td>
-                    <td><span class="box-tick"></span></td>
-                    <td class="btn-delete-row"><button type="button" class="btn-delete-row" onclick="deleteChapter('${subjectKey}', ${index})">✕</button></td>
-                </tr>
-            `;
-        });
-        tbody.innerHTML = html;
-    }
-
-  
+<script src="script.js"></script>
+</body>
+    </html>
+    
