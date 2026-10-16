@@ -229,4 +229,4 @@ td.chap-cell {
 
 @media print {
     .btn-delete-row { display: none; }
-                  }
+}
