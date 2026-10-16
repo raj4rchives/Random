@@ -1,0 +1,533 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>150-Day Master Study Checklist Generator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Custom Scrollbar for sidebar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+
+  /* Preview Container Scale & Styling */
+  .preview-wrapper {
+    background-color: #525659;
+    min-height: 100vh;
+  }
+
+  /* Printable Sheet Styles (Monochrome & Crisp) */
+  .a4-page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 12mm 14mm 10mm 14mm;
+    margin: 0 auto 20px auto;
+    background: #ffffff;
+    color: #000000;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: Arial, Helvetica, sans-serif;
+    position: relative;
+  }
+
+  /* Table styling matching reference image */
+  .checklist-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #000000;
+    margin-top: 6px;
+  }
+
+  .checklist-table th {
+    background-color: #000000;
+    color: #ffffff;
+    font-size: 7.5pt;
+    font-weight: 800;
+    padding: 5px 2px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border: 1px solid #000000;
+  }
+
+  .checklist-table td {
+    border: 1px solid #000000;
+    padding: 3.2px 2px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .day-cell {
+    text-align: left !important;
+    padding-left: 6px !important;
+  }
+
+  .day-num {
+    font-size: 8.5pt;
+    font-weight: 900;
+    color: #000000;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+
+  .day-sub {
+    font-size: 6pt;
+    font-weight: 700;
+    color: #444444;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  /* Printable Checkbox Styling */
+  .sq-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 11px;
+    height: 11px;
+    border: 1.5px solid #000000;
+    background-color: #ffffff;
+    margin: 0 1px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 9px;
+    font-weight: bold;
+    line-height: 1;
+  }
+
+  .sq-box.checked::after {
+    content: '✓';
+    color: #000000;
+  }
+
+  .chk-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5px;
+  }
+
+  /* Printable Header & Footer */
+  .doc-top-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 7.5pt;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #444444;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+  }
+
+  .doc-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2px;
+  }
+
+  .doc-title {
+    font-size: 16pt;
+    font-weight: 900;
+    color: #000000;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .target-goal {
+    font-size: 10pt;
+    font-weight: 800;
+    color: #000000;
+    border-bottom: 1.5px dashed #000000;
+    padding-bottom: 1px;
+    min-width: 240px;
+    text-align: right;
+  }
+
+  .doc-sub-meta {
+    font-size: 8pt;
+    color: #555555;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .page-footer {
+    margin-top: auto;
+    padding-top: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 7.5pt;
+    font-weight: 700;
+    color: #555555;
+    border-top: 1px solid #000000;
+  }
+
+  /* Print Media Overrides */
+  @media print {
+    body {
+      background: #ffffff !important;
+      color: #000000 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .no-print {
+      display: none !important;
+    }
+
+    .preview-wrapper {
+      background: #ffffff !important;
+      padding: 0 !important;
+      min-height: auto !important;
+    }
+
+    .a4-page {
+      width: 100% !important;
+      height: 100vh !important;
+      margin: 0 !important;
+      padding: 10mm 12mm !important;
+      box-shadow: none !important;
+      border: none !important;
+      break-after: page;
+      page-break-after: always;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+  }
+</style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col lg:flex-row">
+
+  <!-- LEFT CONTROL SIDEBAR -->
+  <aside class="no-print w-full lg:w-[420px] bg-slate-800 border-r border-slate-700 flex flex-col h-auto lg:h-screen sticky top-0 z-20">
+    
+    <!-- Sidebar Header -->
+    <div class="p-4 border-b border-slate-700 flex items-center justify-between bg-slate-800/90 backdrop-blur">
+      <div class="flex items-center gap-2.5">
+        <div class="bg-blue-600 text-white p-2 rounded-lg">
+          <i class="fa-solid fa-list-check text-lg"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-base text-white leading-tight">Checklist Generator</h1>
+          <p class="text-xs text-slate-400">150-Day Prep Master Tracker</p>
+        </div>
+      </div>
+      <button id="resetBtn" title="Reset Defaults" class="text-xs text-slate-400 hover:text-white transition px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">
+        <i class="fa-solid fa-rotate-left"></i> Reset
+      </button>
+    </div>
+
+    <!-- Scrollable Form Controls -->
+    <div class="flex-1 overflow-y-auto p-4 space-y-5 custom-scrollbar text-sm">
+
+      <!-- Action Buttons -->
+      <div class="grid grid-cols-2 gap-2">
+        <button id="printBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20 transition">
+          <i class="fa-solid fa-print"></i> Print / PDF
+        </button>
+        <button id="modeToggleBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 transition">
+          <i class="fa-solid fa-check-double"></i> Mode: Blank
+        </button>
+      </div>
+
+      <!-- JSON Data Storage Actions -->
+      <div class="flex gap-2">
+        <button id="exportJsonBtn" class="flex-1 bg-slate-700 hover:bg-slate-600 text-xs py-1.5 px-2 rounded border border-slate-600 flex items-center justify-center gap-1.5 transition">
+          <i class="fa-solid fa-download"></i> Export Config
+        </button>
+        <label id="importJsonLabel" class="flex-1 bg-slate-700 hover:bg-slate-600 text-xs py-1.5 px-2 rounded border border-slate-600 flex items-center justify-center gap-1.5 cursor-pointer transition">
+          <i class="fa-solid fa-upload"></i> Import Config
+          <input type="file" id="importJsonInput" accept=".json" class="hidden">
+        </label>
+      </div>
+
+      <!-- Section 1: Page & Header Settings -->
+      <div class="bg-slate-800/60 border border-slate-700 rounded-xl p-3.5 space-y-3">
+        <div class="flex items-center gap-2 text-blue-400 font-semibold text-xs uppercase tracking-wider">
+          <i class="fa-solid fa-heading"></i> Header & Page Setup
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">Left Tag</label>
+            <input type="text" id="cfgLeftTag" value="YOUR DAILY PLAN" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">Right Tag</label>
+            <input type="text" id="cfgRightTag" value="EXAMYTRACK" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-300 mb-1">Goal / Target Text</label>
+          <input type="text" id="cfgTarget" value="IIIT Bangalore -> AIR under 1000" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">Total Days (Max 300)</label>
+            <input type="number" id="cfgTotalDays" value="150" min="1" max="300" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">Days Per Page</label>
+            <input type="number" id="cfgDaysPerPage" value="20" min="5" max="30" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-300 mb-1">Day Sub-Label (e.g. JEE TRACK)</label>
+          <input type="text" id="cfgDaySub" value="JEE TRACK" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+        </div>
+      </div>
+
+      <!-- Section 2: Columns & Checkbox Counts -->
+      <div class="bg-slate-800/60 border border-slate-700 rounded-xl p-3.5 space-y-3">
+        <div class="flex items-center gap-2 text-emerald-400 font-semibold text-xs uppercase tracking-wider">
+          <i class="fa-solid fa-sliders"></i> Dynamic Columns & Checkboxes
+        </div>
+
+        <!-- Lectures -->
+        <div class="flex items-center justify-between gap-2 bg-slate-900/50 p-2 rounded border border-slate-700/60">
+          <div>
+            <span class="block text-xs font-medium text-slate-200">Lectures</span>
+            <span class="text-[10px] text-slate-400">Checkbox count per day</span>
+          </div>
+          <input type="number" id="cfgLecCount" value="4" min="0" max="10" class="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-center text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+        </div>
+
+        <!-- Questions -->
+        <div class="flex items-center justify-between gap-2 bg-slate-900/50 p-2 rounded border border-slate-700/60">
+          <div>
+            <span class="block text-xs font-medium text-slate-200">Questions</span>
+            <span class="text-[10px] text-slate-400">Checkbox count per day</span>
+          </div>
+          <input type="number" id="cfgQuestCount" value="10" min="0" max="20" class="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-center text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+        </div>
+
+        <!-- Standard Toggles -->
+        <div class="space-y-2 pt-1">
+          <!-- HW -->
+          <div class="flex items-center justify-between gap-2">
+            <label class="flex items-center gap-2 text-xs cursor-pointer">
+              <input type="checkbox" id="cfgHwEnable" checked class="rounded border-slate-700 text-blue-600 focus:ring-0">
+              <span class="text-slate-300">HW / Module Column</span>
+            </label>
+            <input type="text" id="cfgHwLabel" value="HW / MODULE" class="w-28 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-[11px] text-slate-200">
+          </div>
+
+          <!-- DPP -->
+          <div class="flex items-center justify-between gap-2">
+            <label class="flex items-center gap-2 text-xs cursor-pointer">
+              <input type="checkbox" id="cfgDppEnable" checked class="rounded border-slate-700 text-blue-600 focus:ring-0">
+              <span class="text-slate-300">DPP Column</span>
+            </label>
+            <input type="text" id="cfgDppLabel" value="DPP" class="w-28 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-[11px] text-slate-200">
+          </div>
+
+          <!-- PYQ -->
+          <div class="flex items-center justify-between gap-2">
+            <label class="flex items-center gap-2 text-xs cursor-pointer">
+              <input type="checkbox" id="cfgPyqEnable" checked class="rounded border-slate-700 text-blue-600 focus:ring-0">
+              <span class="text-slate-300">PYQ Column</span>
+            </label>
+            <input type="text" id="cfgPyqLabel" value="PYQ" class="w-28 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-[11px] text-slate-200">
+          </div>
+
+          <!-- REV -->
+          <div class="flex items-center justify-between gap-2">
+            <label class="flex items-center gap-2 text-xs cursor-pointer">
+              <input type="checkbox" id="cfgRevEnable" checked class="rounded border-slate-700 text-blue-600 focus:ring-0">
+              <span class="text-slate-300">Revision Column</span>
+            </label>
+            <input type="text" id="cfgRevLabel" value="REV" class="w-28 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-[11px] text-slate-200">
+          </div>
+
+          <!-- Extra Custom Column -->
+          <div class="flex items-center justify-between gap-2 border-t border-slate-700/60 pt-2">
+            <label class="flex items-center gap-2 text-xs cursor-pointer">
+              <input type="checkbox" id="cfgExtraEnable" class="rounded border-slate-700 text-blue-600 focus:ring-0">
+              <span class="text-slate-300">Custom Column</span>
+            </label>
+            <input type="text" id="cfgExtraLabel" value="TEST / NOTES" class="w-28 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-[11px] text-slate-200">
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Sidebar Footer -->
+    <div class="p-3 border-t border-slate-700 text-center text-xs text-slate-400 bg-slate-800">
+      Preview autosynchronizes on edit
+    </div>
+  </aside>
+
+  <!-- RIGHT LIVE DOCUMENT PREVIEW AREA -->
+  <main class="flex-1 preview-wrapper p-4 lg:p-8 overflow-y-auto flex flex-col items-center custom-scrollbar">
+    
+    <!-- Top Floating Toolbar -->
+    <div class="no-print w-full max-w-[210mm] mb-4 flex items-center justify-between bg-slate-800/90 backdrop-blur border border-slate-700 p-3 rounded-xl shadow-lg">
+      <div class="flex items-center gap-3">
+        <span class="text-xs font-medium text-slate-300">
+          <i class="fa-solid fa-eye text-blue-400 mr-1"></i> Live Preview Scale
+        </span>
+        <div class="flex items-center bg-slate-900 rounded border border-slate-700 p-0.5">
+          <button id="zoomOutBtn" class="px-2 py-0.5 text-xs text-slate-300 hover:text-white">-</button>
+          <span id="zoomVal" class="px-2 text-xs font-mono text-blue-400">100%</span>
+          <button id="zoomInBtn" class="px-2 py-0.5 text-xs text-slate-300 hover:text-white">+</button>
+        </div>
+      </div>
+
+      <div class="text-xs text-slate-400 flex items-center gap-2">
+        <span id="interactiveBadge" class="hidden bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">
+          <i class="fa-solid fa-database mr-1"></i> Interactive & Saved
+        </span>
+        <span id="blankBadge" class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded-full font-medium">
+          <i class="fa-solid fa-print mr-1"></i> Blank Printable Layout
+        </span>
+      </div>
+    </div>
+
+    <!-- Rendered Printable Pages Container -->
+    <div id="pagesContainer" class="transition-transform origin-top"></div>
+
+  </main>
+
+<script>
+  // State Management
+  const defaultConfig = {
+    leftTag: 'YOUR DAILY PLAN',
+    rightTag: 'EXAMYTRACK',
+    target: 'IIIT Bangalore -> AIR under 1000',
+    totalDays: 150,
+    daysPerPage: 20,
+    daySub: 'JEE TRACK',
+    lecCount: 4,
+    questCount: 10,
+    hwEnable: true,
+    hwLabel: 'HW / MODULE',
+    dppEnable: true,
+    dppLabel: 'DPP',
+    pyqEnable: true,
+    pyqLabel: 'PYQ',
+    revEnable: true,
+    revLabel: 'REV',
+    extraEnable: false,
+    extraLabel: 'NOTES',
+    interactiveMode: false
+  };
+
+  let config = { ...defaultConfig };
+  let checklistData = {}; // Store box states e.g., { "day-1-lec-0": true }
+  let zoomLevel = 100;
+
+  // DOM Elements
+  const container = document.getElementById('pagesContainer');
+  const modeToggleBtn = document.getElementById('modeToggleBtn');
+  const interactiveBadge = document.getElementById('interactiveBadge');
+  const blankBadge = document.getElementById('blankBadge');
+
+  // Input Mapping
+  const inputs = {
+    leftTag: document.getElementById('cfgLeftTag'),
+    rightTag: document.getElementById('cfgRightTag'),
+    target: document.getElementById('cfgTarget'),
+    totalDays: document.getElementById('cfgTotalDays'),
+    daysPerPage: document.getElementById('cfgDaysPerPage'),
+    daySub: document.getElementById('cfgDaySub'),
+    lecCount: document.getElementById('cfgLecCount'),
+    questCount: document.getElementById('cfgQuestCount'),
+    hwEnable: document.getElementById('cfgHwEnable'),
+    hwLabel: document.getElementById('cfgHwLabel'),
+    dppEnable: document.getElementById('cfgDppEnable'),
+    dppLabel: document.getElementById('cfgDppLabel'),
+    pyqEnable: document.getElementById('cfgPyqEnable'),
+    pyqLabel: document.getElementById('cfgPyqLabel'),
+    revEnable: document.getElementById('cfgRevEnable'),
+    revLabel: document.getElementById('cfgRevLabel'),
+    extraEnable: document.getElementById('cfgExtraEnable'),
+    extraLabel: document.getElementById('cfgExtraLabel')
+  };
+
+  // Load Saved Data from LocalStorage
+  function loadFromStorage() {
+    try {
+      const savedCfg = localStorage.getItem('study_checklist_cfg');
+      if (savedCfg) config = { ...config, ...JSON.parse(savedCfg) };
+
+      const savedData = localStorage.getItem('study_checklist_data');
+      if (savedData) checklistData = JSON.parse(savedData);
+    } catch (e) {
+      console.warn('Could not load stored checklist state.', e);
+    }
+  }
+
+  function saveToStorage() {
+    try {
+      localStorage.setItem('study_checklist_cfg', JSON.stringify(config));
+      localStorage.setItem('study_checklist_data', JSON.stringify(checklistData));
+    } catch (e) {
+      console.warn('Could not save checklist state.', e);
+    }
+  }
+
+  // Populate UI inputs from Config
+  function syncInputsWithConfig() {
+    inputs.leftTag.value = config.leftTag;
+    inputs.rightTag.value = config.rightTag;
+    inputs.target.value = config.target;
+    inputs.totalDays.value = config.totalDays;
+    inputs.daysPerPage.value = config.daysPerPage;
+    inputs.daySub.value = config.daySub;
+    inputs.lecCount.value = config.lecCount;
+    inputs.questCount.value = config.questCount;
+
+    inputs.hwEnable.checked = config.hwEnable;
+    inputs.hwLabel.value = config.hwLabel;
+    inputs.dppEnable.checked = config.dppEnable;
+    inputs.dppLabel.value = config.dppLabel;
+    inputs.pyqEnable.checked = config.pyqEnable;
+    inputs.pyqLabel.value = config.pyqLabel;
+    inputs.revEnable.checked = config.revEnable;
+    inputs.revLabel.value = config.revLabel;
+    inputs.extraEnable.checked = config.extraEnable;
+    inputs.extraLabel.value = config.extraLabel;
+
+    updateModeUI();
+  }
+
+  // Read Config from UI inputs
+  function readConfigFromInputs() {
+    config.leftTag = inputs.leftTag.value || 'YOUR DAILY PLAN';
+    config.rightTag = inputs.rightTag.value || 'EXAMYTRACK';
+    config.target = inputs.target.value;
+    config.totalDays = Math.min(300, Math.max(1, parseInt(inputs.totalDays.value) || 150));
+    config.daysPerPage = Math.min(30, Math.max(5, parseInt(inputs.daysPerPage.value) || 20));
+    c
