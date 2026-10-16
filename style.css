@@ -133,7 +133,6 @@ body {
     padding: 20px;
     margin-bottom: 40px;
     page-break-before: always;
-    page-break-inside: avoid;
     background: white;
 }
 .subject-page:first-child {
@@ -177,7 +176,11 @@ table.tracker-table {
     table-layout: fixed;
     border-collapse: collapse;
     font-size: 11px;
-    page-break-inside: auto;
+}
+
+/* Crucial fix to repeat the table header across page breaks */
+table.tracker-table thead {
+    display: table-header-group;
 }
 
 table.tracker-table tr {
@@ -229,4 +232,4 @@ td.chap-cell {
 
 @media print {
     .btn-delete-row { display: none; }
-}
+    }
