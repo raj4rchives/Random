@@ -1,31 +1,33 @@
-const defaultPhysics = [
-    "Basic Maths", "Motion in straight line", "Motion in plane", "Newton Law's of Motion",
-    "Circular motion", "Work energy power", "Centre of mass", "Rotational motion",
-    "Mechanical properties of solid", "Mechanical properties of fluids", "Thermal properties of matter",
-    "Ktg and thermodynamics", "Simple harmonic motion", "Waves", "Electric charges and field",
-    "Electrostatic potential capacitance", "Current Electricity", "Moving charges and Magnetism",
-    "Electromagnetic induction", "Gravitation", "Alt current", "Ray OPTICS", "Electromagnetic waves",
-    "Wave optics", "Modern phy", "Unit and measurement", "Semiconductor"
-];
-
 let syllabusData = {
-    Physics: defaultPhysics.map(name => ({ name })),
+    Physics: [],
     Chemistry: [],
     Mathematics: []
 };
 
 function init() {
-    const saved = localStorage.getItem('jee_all_subjects_tracker_v8');
+    const saved = localStorage.getItem('jee_master_syllabus_tracker_empty_v1');
     if (saved) {
         try {
-            syllabusData = JSON.parse(saved);
-        } catch (e) {}
+            const parsed = JSON.parse(saved);
+            if (parsed && typeof parsed === 'object') {
+                syllabusData.Physics = parsed.Physics || [];
+                syllabusData.Chemistry = parsed.Chemistry || [];
+                syllabusData.Mathematics = parsed.Mathematics || [];
+            }
+        } catch (e) {
+            console.error("Error loading local storage data", e);
+        }
     }
     renderAllTables();
 }
 
+function saveToLocalStorage() {
+    localStorage.setItem('jee_master_syllabus_tracker_empty_v1', JSON.stringify(syllabusData));
+}
+
 function renderTableFor(subjectKey, tbodyId) {
     const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
     const list = syllabusData[subjectKey] || [];
     let html = '';
     list.forEach((item, index) => {
@@ -56,28 +58,33 @@ function renderAllTables() {
     renderTableFor('Physics', 'physicsTableBody');
     renderTableFor('Chemistry', 'chemistryTableBody');
     renderTableFor('Mathematics', 'mathematicsTableBody');
-    localStorage.setItem('jee_all_subjects_tracker_v8', JSON.stringify(syllabusData));
+    saveToLocalStorage();
 }
 
 function addChapter() {
     const subject = document.getElementById('subjectSelect').value;
-    const name = document.getElementById('chapNameInput').value.trim();
+    const nameInput = document.getElementById('chapNameInput');
+    const name = nameInput.value.trim();
 
     if (!name) {
         alert('Kripya Chapter Name fill karein!');
         return;
     }
 
-    if (!syllabusData[subject]) syllabusData[subject] = [];
+    if (!syllabusData[subject]) {
+        syllabusData[subject] = [];
+    }
+    
     syllabusData[subject].push({ name: name });
-
-    document.getElementById('chapNameInput').value = '';
+    nameInput.value = '';
     renderAllTables();
 }
 
 function deleteChapter(subject, index) {
-    syllabusData[subject].splice(index, 1);
-    renderAllTables();
+    if (syllabusData[subject]) {
+        syllabusData[subject].splice(index, 1);
+        renderAllTables();
+    }
 }
 
 function clearAll() {
@@ -106,9 +113,9 @@ function importJSON(event) {
         try {
             const parsed = JSON.parse(e.target.result);
             if (parsed.Physics || parsed.Chemistry || parsed.Mathematics) {
-                syllabusData = parsed;
-            } else if (Array.isArray(parsed)) {
-                syllabusData.Physics = parsed.map(i => ({ name: i.name || i }));
+                syllabusData.Physics = parsed.Physics || [];
+                syllabusData.Chemistry = parsed.Chemistry || [];
+                syllabusData.Mathematics = parsed.Mathematics || [];
             }
             renderAllTables();
             alert('Data successfully import ho gaya hai!');
@@ -125,25 +132,19 @@ function downloadPDF() {
     const deleteBtns = document.querySelectorAll('.btn-delete-row');
     deleteBtns.forEach(btn => btn.style.display = 'none');
 
-    // Smart auto-splitting logic to insert headers cleanly on every page break
     const tables = element.querySelectorAll('table.tracker-table');
-    const clonedTables = [];
-
     tables.forEach(table => {
         const tbody = table.querySelector('tbody');
         const rows = Array.from(tbody.querySelectorAll('tr'));
         
-        // If table has more than 20 rows, split it into chunks so headers naturally appear on new pages
         if (rows.length > 20) {
             const theadHTML = table.querySelector('thead').outerHTML;
             const colgroupHTML = table.querySelector('colgroup').outerHTML;
             const parentPage = table.closest('.subject-page');
             const headerRowHTML = parentPage.querySelector('.pdf-header-row').outerHTML;
             
-            // Clear current subject page content
             parentPage.innerHTML = '';
 
-            // Chunk rows into batches of 20 items per page
             const chunkSize = 20;
             for (let i = 0; i < rows.length; i += chunkSize) {
                 const chunkRows = rows.slice(i, i + chunkSize);
@@ -179,7 +180,7 @@ function downloadPDF() {
 
     html2pdf().set(opt).from(element).save().then(() => {
         deleteBtns.forEach(btn => btn.style.display = '');
-        renderAllTables(); // Reset DOM back to original single-table state
+        renderAllTables();
     });
 }
 
